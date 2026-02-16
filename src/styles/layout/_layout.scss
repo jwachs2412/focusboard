@@ -1,0 +1,17 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100vh;
+
+  &__header {
+    background: #111;
+    color: #fff;
+    padding-block: 1rem;
+    padding-inline: 2rem;
+  }
+
+  &__main {
+    flex: 1;
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,16 @@
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task-item {
+  border-block-end: 1px solid #ddd;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+
+  &--completed {
+    color: #888;
+    text-decoration: line-through;
+  }
+}
