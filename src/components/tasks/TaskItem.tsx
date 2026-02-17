@@ -1,15 +1,16 @@
+import type { Task } from "../../types/Task"
+
 type TaskItemProps = {
-  title: string
-  completed: boolean
-  onToggle: () => void
-  onDelete: () => void
+  task: Task
+  onToggle: (id: string) => void
+  onDelete: (id: string) => void
 }
 
-function TaskItem({ title, completed, onToggle, onDelete }: TaskItemProps) {
+function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   return (
-    <li className={`task-item ${completed ? "task-item--completed" : ""}`} onClick={onToggle}>
-      <span onClick={onToggle}>{title}</span>
-      <button onClick={onDelete}>Delete</button>
+    <li className={`task-item ${task.completed ? "task-item--completed" : ""}`}>
+      <span onClick={() => onToggle(task.id)}>{task.title}</span>
+      <button onClick={() => onDelete(task.id)}>Delete</button>
     </li>
   )
 }

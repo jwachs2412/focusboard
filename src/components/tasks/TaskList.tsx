@@ -11,7 +11,7 @@ function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
   return (
     <ul className="task-list">
       {tasks.map(task => (
-        <TaskItem key={task.id} title={task.title} completed={task.completed} onToggle={() => onToggle(task.id)} onDelete={() => onDelete(task.id)} />
+        <TaskItem key={task.id} task={task} onToggle={() => onToggle(task.id)} onDelete={() => onDelete(task.id)} />
       ))}
     </ul>
   )
