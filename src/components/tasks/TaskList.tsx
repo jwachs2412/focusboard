@@ -3,7 +3,7 @@ import type { Task } from "../../types/Task"
 
 type TaskListProps = {
   tasks: Task[]
-  onToggle: (id: string) => void
+  onToggle: (id: string, completed: boolean) => void
   onDelete: (id: string) => void
 }
 
@@ -11,7 +11,7 @@ function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
   return (
     <ul className="task-list">
       {tasks.map(task => (
-        <TaskItem key={task.id} task={task} onToggle={() => onToggle(task.id)} onDelete={() => onDelete(task.id)} />
+        <TaskItem key={task.id} task={task} onToggle={() => onToggle(task.id, task.completed)} onDelete={() => onDelete(task.id)} />
       ))}
     </ul>
   )

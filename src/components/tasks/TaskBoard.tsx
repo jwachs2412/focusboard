@@ -3,8 +3,11 @@ import TaskForm from "./TaskForm"
 import TaskList from "./TaskList"
 
 function TaskBoard() {
-  const { tasks, addTask, toggleTask, deleteTask, activeCount } = useTasks()
+  const { tasks, loading, addTask, toggleTask, deleteTask, activeCount } = useTasks()
 
+  if (loading) {
+    return <p>Loading tasks...</p>
+  }
   return (
     <section className="task-board">
       <TaskForm onAddTask={addTask} />
