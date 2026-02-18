@@ -29,6 +29,36 @@ app.get("/tasks", (req, res) => {
   res.status(200).json(tasks)
 })
 
+app.put("/tasks/:id", (req, res) => {
+  const { id } = req.params
+  const { title, completed } = req.body
+
+  const task = tasks.find(t => t.id === id)
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" })
+  }
+
+  if (title !== undefined) task.title = title
+  if (completed !== undefined) task.completed = completed
+
+  res.status(200).json(task)
+})
+
+app.delete("/tasks/:id", (req, res) => {
+  const { id } = req.params
+
+  const index = tasks.findIndex(t => t.id === id)
+
+  if (index === -1) {
+    return res.status(404).json({ error: "Task not found" })
+  }
+
+  tasks.splice(index, 1)
+
+  res.status(204).send()
+})
+
 const PORT = process.env.PORT || 5050
 
 app.listen(PORT, () => {
