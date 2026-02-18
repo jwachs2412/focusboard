@@ -41,7 +41,7 @@ export function useTasks() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("/api/tasks")
+        const response = await fetch("http://localhost:5050/tasks")
         const data = await response.json()
         setTasks(data)
       } catch (error) {
