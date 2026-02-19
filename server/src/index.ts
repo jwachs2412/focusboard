@@ -11,22 +11,37 @@ app.use(cors())
 app.use(express.json())
 
 app.post("/tasks", (req, res) => {
-  const { title } = req.body
+  try {
+    const { title } = req.body
 
-  if (!title) {
-    return res.status(400).json({ error: "Title is required" })
+    if (!title) {
+      return res.status(400).json({ error: "Title is required" })
+    }
+
+    const newTask = addTask(title)
+    res.status(201).json(newTask)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "Failed to add task" })
   }
-
-  const newTask = addTask(title)
-  res.status(201).json(newTask)
 })
 
 app.get("/", (req, res) => {
-  res.send("Server is running 🚀")
+  try {
+    res.send("Server is running 🚀")
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "Server failed to respond" })
+  }
 })
 
 app.get("/tasks", (req, res) => {
-  res.status(200).json(tasks)
+  try {
+    res.json(tasks)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "Failed to fetch tasks" })
+  }
 })
 
 app.put("/tasks/:id", (req, res) => {

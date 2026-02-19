@@ -3,11 +3,21 @@ import TaskForm from "./TaskForm"
 import TaskList from "./TaskList"
 
 function TaskBoard() {
-  const { tasks, loading, addTask, toggleTask, deleteTask, activeCount } = useTasks()
+  const { tasks, loading, addTask, toggleTask, deleteTask, activeCount, error, fetchTasks } = useTasks()
 
   if (loading) {
     return <p>Loading tasks...</p>
   }
+
+  if (error) {
+    return (
+      <div>
+        <p style={{ color: "red" }}>{error}</p>
+        <button onClick={fetchTasks}>Retry</button>
+      </div>
+    )
+  }
+
   return (
     <section className="task-board">
       <TaskForm onAddTask={addTask} />

@@ -4,55 +4,94 @@ import type { Task } from "../types/Task"
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const addTask = async (title: string) => {
-    const response = await fetch("http://localhost:5050/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title })
-    })
+    try {
+      const response = await fetch("http://localhost:5050/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title })
+      })
 
-    const newTask = await response.json()
-    setTasks(prev => [...prev, newTask])
+      if (!response.ok) {
+        throw new Error("Failed to add task")
+      }
+
+      const newTask = await response.json()
+      setTasks(prev => [...prev, newTask])
+      setError(null)
+    } catch (err) {
+      console.error("Add task failed:", err)
+      setError("Could not add task. Please try again.")
+    }
   }
 
   const toggleTask = async (id: string, completed: boolean) => {
-    const response = await fetch(`http://localhost:5050/tasks/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ completed: !completed })
-    })
+    try {
+      const response = await fetch(`http://localhost:5050/tasks/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: !completed })
+      })
 
-    const updatedTask = await response.json()
+      if (!response.ok) {
+        throw new Error("Failed to update task")
+      }
 
-    setTasks(prev => prev.map(task => (task.id === id ? updatedTask : task)))
+      const updatedTask = await response.json()
+
+      setTasks(prev => prev.map(task => (task.id === id ? updatedTask : task)))
+      setError(null)
+    } catch (err) {
+      console.error("Toggle failed:", err)
+      setError("Could not update task. Please try again.")
+    }
   }
 
   const deleteTask = async (id: string) => {
-    await fetch(`http://localhost:5050/tasks/${id}`, {
-      method: "DELETE"
-    })
+    try {
+      const response = await fetch(`http://localhost:5050/tasks/${id}`, {
+        method: "DELETE"
+      })
 
-    setTasks(prev => prev.filter(task => task.id !== id))
+      if (!response.ok) {
+        throw new Error("Failed to delete task")
+      }
+
+      setTasks(prev => prev.filter(task => task.id !== id))
+      setError(null)
+    } catch (err) {
+      console.error("Delete failed:", err)
+      setError("Could not delete task. Please try again.")
+    }
   }
 
   const activeCount = tasks.filter(task => !task.completed).length
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch("http://localhost:5050/tasks")
-        const data = await response.json()
-        setTasks(data)
-      } catch (error) {
-        console.error("Failed to fetch tasks:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const fetchTasks = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch("http://localhost:5050/tasks")
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      setTasks(data)
+      setError(null)
+    } catch (error) {
+      console.error("Failed to fetch tasks:", error)
+      setError("Failed to load tasks. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchTasks()
   }, [])
 
-  return { tasks, loading, addTask, toggleTask, deleteTask, activeCount }
+  return { tasks, loading, addTask, toggleTask, deleteTask, fetchTasks, activeCount, error }
 }
