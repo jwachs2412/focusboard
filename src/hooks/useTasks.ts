@@ -1,14 +1,37 @@
 import { useEffect, useState } from "react"
 import type { Task } from "../types/Task"
 
+const API_URL = import.meta.env.VITE_API_URL
+
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const fetchTasks = async () => {
+    try {
+      setLoading(true)
+
+      const response = await fetch(`${API_URL}/tasks`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      setTasks(data)
+      setError(null)
+    } catch (error) {
+      console.error("Failed to fetch tasks:", error)
+      setError("Failed to load tasks. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const addTask = async (title: string) => {
     try {
-      const response = await fetch("http://localhost:5050/tasks", {
+      const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title })
@@ -29,7 +52,7 @@ export function useTasks() {
 
   const toggleTask = async (id: string, completed: boolean) => {
     try {
-      const response = await fetch(`http://localhost:5050/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/tasks/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed: !completed })
@@ -51,7 +74,7 @@ export function useTasks() {
 
   const deleteTask = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:5050/tasks/${id}`, {
+      const response = await fetch(`${API_URL}/tasks/${id}`, {
         method: "DELETE"
       })
 
@@ -69,29 +92,9 @@ export function useTasks() {
 
   const activeCount = tasks.filter(task => !task.completed).length
 
-  const fetchTasks = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch("http://localhost:5050/tasks")
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
-      setTasks(data)
-      setError(null)
-    } catch (error) {
-      console.error("Failed to fetch tasks:", error)
-      setError("Failed to load tasks. Please try again.")
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
     fetchTasks()
   }, [])
 
-  return { tasks, loading, addTask, toggleTask, deleteTask, fetchTasks, activeCount, error }
+  return { tasks, loading, error, fetchTasks, addTask, toggleTask, deleteTask, activeCount }
 }
