@@ -1,16 +1,27 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
-import { tasks, addTask, Task } from "./tasks"
+import mongoose from "mongoose"
+import { Task } from "./models/TaskModel"
 
 dotenv.config()
+
+const mongoUri = process.env.MONGO_URI || "mongodb+srv://taskappuser:Cleveland1974!Cleveland1974!@cluster0.ppkgava.mongodb.net/taskapp?appName=Cluster0"
+
+mongoose
+  .connect(mongoUri)
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch(err => {
+    console.error("MongoDB connection error:", err)
+    process.exit(1) // stops server if DB fails to connect
+  })
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 
-app.post("/tasks", (req, res) => {
+app.post("/tasks", async (req, res) => {
   try {
     const { title } = req.body
 
@@ -18,7 +29,9 @@ app.post("/tasks", (req, res) => {
       return res.status(400).json({ error: "Title is required" })
     }
 
-    const newTask = addTask(title)
+    const newTask = new Task({ title })
+    await newTask.save()
+
     res.status(201).json(newTask)
   } catch (err) {
     console.error(err)
@@ -35,43 +48,49 @@ app.get("/", (req, res) => {
   }
 })
 
-app.get("/tasks", (req, res) => {
+app.get("/tasks", async (req, res) => {
   try {
-    res.json(tasks)
+    const tasks = await Task.find()
+    res.status(200).json(tasks)
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: "Failed to fetch tasks" })
   }
 })
 
-app.put("/tasks/:id", (req, res) => {
+app.put("/tasks/:id", async (req, res) => {
   const { id } = req.params
   const { title, completed } = req.body
 
-  const task = tasks.find(t => t.id === id)
+  try {
+    const task = await Task.findById(id)
 
-  if (!task) {
-    return res.status(404).json({ error: "Task not found" })
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" })
+    }
+
+    if (title !== undefined) task.title = title
+    if (completed !== undefined) task.completed = completed
+
+    await task.save()
+    res.status(200).json(task)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "Failed to update task" })
   }
-
-  if (title !== undefined) task.title = title
-  if (completed !== undefined) task.completed = completed
-
-  res.status(200).json(task)
 })
 
-app.delete("/tasks/:id", (req, res) => {
+app.delete("/tasks/:id", async (req, res) => {
   const { id } = req.params
+  try {
+    const result = await Task.findByIdAndDelete(id)
+    if (!result) return res.status(404).json({ error: "Task not found" })
 
-  const index = tasks.findIndex(t => t.id === id)
-
-  if (index === -1) {
-    return res.status(404).json({ error: "Task not found" })
+    res.status(204).send()
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: "Failed to delete task" })
   }
-
-  tasks.splice(index, 1)
-
-  res.status(204).send()
 })
 
 const PORT = process.env.PORT || 5050
