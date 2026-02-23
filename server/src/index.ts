@@ -51,7 +51,13 @@ app.get("/", (req, res) => {
 app.get("/tasks", async (req, res) => {
   try {
     const tasks = await Task.find()
-    res.status(200).json(tasks)
+    res.status(200).json(
+      tasks.map(task => ({
+        id: task._id.toString(),
+        title: task.title,
+        completed: task.completed
+      }))
+    )
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: "Failed to fetch tasks" })
