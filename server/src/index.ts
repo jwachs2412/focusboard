@@ -30,9 +30,13 @@ app.post("/tasks", async (req, res) => {
     }
 
     const newTask = new Task({ title })
-    await newTask.save()
+    const savedTask = await newTask.save()
 
-    res.status(201).json(newTask)
+    res.status(201).json({
+      id: savedTask._id.toString(),
+      title: savedTask.title,
+      completed: savedTask.completed
+    })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: "Failed to add task" })
@@ -78,8 +82,12 @@ app.put("/tasks/:id", async (req, res) => {
     if (title !== undefined) task.title = title
     if (completed !== undefined) task.completed = completed
 
-    await task.save()
-    res.status(200).json(task)
+    const updatedTask = await task.save()
+    res.status(200).json({
+      id: updatedTask._id.toString(),
+      title: updatedTask.title,
+      completed: updatedTask.completed
+    })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: "Failed to update task" })
