@@ -5,9 +5,11 @@ import mongoose from "mongoose"
 import { Task } from "./models/TaskModel"
 import authRoutes from "./routes/auth"
 
-dotenv.config()
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || "development"}`
+})
 
-const mongoUri = process.env.MONGO_URI || "mongodb+srv://taskappuser:Cleveland1974!Cleveland1974!@cluster0.ppkgava.mongodb.net/taskapp?appName=Cluster0"
+const mongoUri = process.env.MONGO_URI as string
 
 mongoose
   .connect(mongoUri)
