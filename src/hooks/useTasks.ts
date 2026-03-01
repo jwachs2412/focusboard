@@ -3,6 +3,8 @@ import type { Task } from "../types/Task"
 
 const API_URL = import.meta.env.VITE_API_URL
 
+console.log("API_URL:", API_URL)
+
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
