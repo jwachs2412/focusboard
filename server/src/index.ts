@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import mongoose from "mongoose"
 import { Task } from "./models/TaskModel"
 import authRoutes from "./routes/auth"
+import { authMiddleware } from "./middleware/auth"
 
 dotenv.config({
   path: `.env.${process.env.NODE_ENV || "development"}`
@@ -25,7 +26,7 @@ app.use(cors())
 app.use(express.json())
 app.use("/auth", authRoutes)
 
-app.post("/tasks", async (req, res) => {
+app.post("/tasks", authMiddleware, async (req, res) => {
   try {
     const { title } = req.body
 
@@ -47,7 +48,7 @@ app.post("/tasks", async (req, res) => {
   }
 })
 
-app.get("/", (req, res) => {
+app.get("/", authMiddleware, (req, res) => {
   try {
     res.send("Server is running 🚀")
   } catch (err) {
@@ -56,7 +57,7 @@ app.get("/", (req, res) => {
   }
 })
 
-app.get("/tasks", async (req, res) => {
+app.get("/tasks", authMiddleware, async (req, res) => {
   try {
     const tasks = await Task.find()
     res.status(200).json(
@@ -72,7 +73,7 @@ app.get("/tasks", async (req, res) => {
   }
 })
 
-app.put("/tasks/:id", async (req, res) => {
+app.put("/tasks/:id", authMiddleware, async (req, res) => {
   const { id } = req.params
   const { title, completed } = req.body
 
@@ -98,7 +99,7 @@ app.put("/tasks/:id", async (req, res) => {
   }
 })
 
-app.delete("/tasks/:id", async (req, res) => {
+app.delete("/tasks/:id", authMiddleware, async (req, res) => {
   const { id } = req.params
   try {
     const result = await Task.findByIdAndDelete(id)
