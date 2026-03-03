@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useAuth } from "../contexts/AuthContext"
 import type { Task } from "../types/Task"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -10,11 +11,24 @@ export function useTasks() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const { token } = useAuth()
+
   const fetchTasks = async () => {
+    if (!token) {
+      setError("You must be logged in")
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
 
-      const response = await fetch(`${API_URL}/tasks`)
+      const response = await fetch(`${API_URL}/tasks`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -35,7 +49,10 @@ export function useTasks() {
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({ title })
       })
 
@@ -56,7 +73,10 @@ export function useTasks() {
     try {
       const response = await fetch(`${API_URL}/tasks/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({ completed: !completed })
       })
 
@@ -77,7 +97,10 @@ export function useTasks() {
   const deleteTask = async (id: string) => {
     try {
       const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
 
       if (!response.ok) {

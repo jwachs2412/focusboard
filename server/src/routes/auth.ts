@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
     )
 
     // Return the token
-    res.status(200).json({ token })
+    res.status(200).json({ message: "Login successful", token })
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: "Failed to login" })
