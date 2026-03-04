@@ -45,6 +45,12 @@ export default function LoginPage() {
       </form>
 
       {error && <p>{error}</p>}
+
+      <div>
+        <p>
+          Need to create an account? <a href="/register">Register here</a>
+        </p>
+      </div>
     </div>
   )
 }

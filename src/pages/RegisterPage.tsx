@@ -47,6 +47,12 @@ export default function RegisterPage() {
       </form>
 
       {error && <p>{error}</p>}
+
+      <div>
+        <p>
+          Already have an account? <a href="/login">Login here</a>
+        </p>
+      </div>
     </div>
   )
 }
