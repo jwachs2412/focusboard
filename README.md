@@ -4,12 +4,12 @@ A full-stack task management application where users can register, log in, and m
 
 Built with:
 
-- React
-- TypeScript
-- Vite
-- Express
-- MongoDB
-- JWT Authentication
+- React<br>
+- TypeScript<br>
+- Vite<br>
+- Express<br>
+- MongoDB<br>
+- JWT Authentication<br>
 
 ---
 
@@ -17,20 +17,20 @@ Built with:
 
 ## Frontend
 
-- React
-- TypeScript
-- Vite
-- React Context API
-- Custom Hooks
+- React<br>
+- TypeScript<br>
+- Vite<br>
+- React Context API<br>
+- Custom Hooks<br>
 
 ## Backend
 
-- Node.js
-- Express
-- MongoDB
-- Mongoose
-- JWT Authentication
-- bcrypt password hashing
+- Node.js<br>
+- Express<br>
+- MongoDB<br>
+- Mongoose<br>
+- JWT Authentication<br>
+- bcrypt password hashing<br>
 
 ---
 
@@ -38,24 +38,24 @@ Built with:
 
 ### Authentication
 
-- User registration
-- User login
-- JWT token authentication
-- Protected API routes
-- Protected frontend routes
+- User registration<br>
+- User login<br>
+- JWT token authentication<br>
+- Protected API routes<br>
+- Protected frontend routes<br>
 
 ### Task Management
 
-- Create tasks
-- View tasks
-- Toggle completion
-- Delete tasks
+- Create tasks<br>
+- View tasks<br>
+- Toggle completion<br>
+- Delete tasks<br>
 
 ### Security
 
-- Password hashing with bcrypt
-- JWT authentication middleware
-- Token verification on protected routes
+- Password hashing with bcrypt<br>
+- JWT authentication middleware<br>
+- Token verification on protected routes<br>
 
 ---
 
@@ -63,42 +63,42 @@ Built with:
 
 ## Frontend
 
-src
-├── assets
-├── components
-│ ├── layout
-│ └── tasks
-├── contexts
-│ └── AuthContext.tsx
-├── hooks
-│ └── useTasks.ts
-├── pages
-│ ├── LoginPage.tsx
-│ └── RegisterPage.tsx
-├── services
-│ └── taskService.ts
-├── styles
-└── types
-└── Task.ts
+src<br>
+├── assets<br>
+├── components<br>
+│ ├── layout<br>
+│ └── tasks<br>
+├── contexts<br>
+│ └── AuthContext.tsx<br>
+├── hooks<br>
+│ └── useTasks.ts<br>
+├── pages<br>
+│ ├── LoginPage.tsx<br>
+│ └── RegisterPage.tsx<br>
+├── services<br>
+│ └── taskService.ts<br>
+├── styles<br>
+└── types<br>
+└── Task.ts<br>
 
 ## Backend
 
-server/src
-├── controllers
-│ ├── authController.ts
-│ └── taskController.ts
-├── middleware
-│ └── auth.ts
-├── models
-│ ├── UserModel.ts
-│ └── TaskModel.ts
-├── routes
-│ ├── auth.ts
-│ └── tasks.ts
-├── services
-│ ├── authService.ts
-│ └── taskService.ts
-└── index.ts
+server/src<br>
+├── controllers<br>
+│ ├── authController.ts<br>
+│ └── taskController.ts<br>
+├── middleware<br>
+│ └── auth.ts<br>
+├── models<br>
+│ ├── UserModel.ts<br>
+│ └── TaskModel.ts<br>
+├── routes<br>
+│ ├── auth.ts<br>
+│ └── tasks.ts<br>
+├── services<br>
+│ ├── authService.ts<br>
+│ └── taskService.ts<br>
+└── index.ts<br>
 
 ---
 
@@ -182,10 +182,10 @@ Route → Controller → Service → Database
 
 Benefits:
 
-- Cleaner route handlers
-- Reusable logic
-- Easier testing
-- Better separation of concerns
+- Cleaner route handlers<br>
+- Reusable logic<br>
+- Easier testing<br>
+- Better separation of concerns<br>
 
 ### Single Source of Truth
 
@@ -209,17 +209,17 @@ A centralized `Task` type ensures consistency across components.
 
 Authentication flow:
 
-User Login
-↓
-Backend validates credentials
-↓
-JWT token generated
-↓
-Token stored in localStorage
-↓
-Frontend sends Authorization header
-↓
-Backend middleware verifies token
+User Login<br>
+↓<br>
+Backend validates credentials<br>
+↓<br>
+JWT token generated<br>
+↓<br>
+Token stored in localStorage<br>
+↓<br>
+Frontend sends Authorization header<br>
+↓<br>
+Backend middleware verifies token<br>
 
 ---
 
@@ -227,12 +227,12 @@ Backend middleware verifies token
 
 Potential enhancements:
 
-- Task due dates
-- Task categories
-- Drag-and-drop task ordering
-- Refresh tokens
-- User profiles
-- Deployment with Docker
+- Task due dates<br>
+- Task categories<br>
+- Drag-and-drop task ordering<br>
+- Refresh tokens<br>
+- User profiles<br>
+- Deployment with Docker<br>
 
 ---
 
@@ -242,10 +242,10 @@ This project started with the official Vite React + TypeScript template.
 
 It provides:
 
-- Fast Refresh via Vite
-- ESLint integration
-- TypeScript support
-- Modern React tooling
+- Fast Refresh via Vite<br>
+- ESLint integration<br>
+- TypeScript support<br>
+- Modern React tooling<br>
 
 See the Vite docs for more:
 
