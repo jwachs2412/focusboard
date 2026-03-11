@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
-import { User } from "../models/UserModel"
+import { User, IUser } from "../models/UserModel"
 
 interface AuthRequest extends Request {
-  user?: any
+  user?: IUser
 }
 
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {

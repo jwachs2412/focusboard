@@ -1,7 +1,7 @@
 import mongoose, { HydratedDocument } from "mongoose"
 import bcrypt from "bcrypt"
 
-export interface IUser {
+export interface IUser extends Document {
   name: string
   email: string
   password: string

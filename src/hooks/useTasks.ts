@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useAuth } from "../contexts/AuthContext"
 import type { Task } from "../types/Task"
-
-const API_URL = import.meta.env.VITE_API_URL
-
-console.log("API_URL:", API_URL)
+import * as taskService from "../services/taskService"
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -13,7 +10,7 @@ export function useTasks() {
 
   const { token } = useAuth()
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     if (!token) {
       setError("You must be logged in")
       setLoading(false)
@@ -23,18 +20,8 @@ export function useTasks() {
     try {
       setLoading(true)
 
-      const response = await fetch(`${API_URL}/tasks`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const data = await taskService.getTasks(token)
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
       setTasks(data)
       setError(null)
     } catch (error) {
@@ -43,24 +30,14 @@ export function useTasks() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [token])
 
   const addTask = async (title: string) => {
+    if (!token) return
+
     try {
-      const response = await fetch(`${API_URL}/tasks`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ title })
-      })
+      const newTask = await taskService.createTask(title, token)
 
-      if (!response.ok) {
-        throw new Error("Failed to add task")
-      }
-
-      const newTask = await response.json()
       setTasks(prev => [...prev, newTask])
       setError(null)
     } catch (err) {
@@ -70,23 +47,13 @@ export function useTasks() {
   }
 
   const toggleTask = async (id: string, completed: boolean) => {
+    if (!token) return
+
     try {
-      const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ completed: !completed })
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update task")
-      }
-
-      const updatedTask = await response.json()
+      const updatedTask = await taskService.updateTask(id, { completed: !completed }, token)
 
       setTasks(prev => prev.map(task => (task.id === id ? updatedTask : task)))
+
       setError(null)
     } catch (err) {
       console.error("Toggle failed:", err)
@@ -95,19 +62,13 @@ export function useTasks() {
   }
 
   const deleteTask = async (id: string) => {
-    try {
-      const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+    if (!token) return
 
-      if (!response.ok) {
-        throw new Error("Failed to delete task")
-      }
+    try {
+      await taskService.deleteTask(id, token)
 
       setTasks(prev => prev.filter(task => task.id !== id))
+
       setError(null)
     } catch (err) {
       console.error("Delete failed:", err)
@@ -119,7 +80,7 @@ export function useTasks() {
 
   useEffect(() => {
     fetchTasks()
-  }, [])
+  }, [fetchTasks])
 
   return { tasks, loading, error, fetchTasks, addTask, toggleTask, deleteTask, activeCount }
 }
