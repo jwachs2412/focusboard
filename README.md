@@ -106,17 +106,17 @@ server/src<br>
 
 ### `.env.development`
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-PORT=5050
-VITE_API_URL=http://localhost:5050
+MONGO_URI=your_mongodb_connection_string<br>
+JWT_SECRET=your_secret_key<br>
+PORT=5050<br>
+VITE_API_URL=http://localhost:5050<br>
 
 ### `.env.production`
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-PORT=5050
-VITE_API_URL=https://your-api-url
+MONGO_URI=your_mongodb_connection_string<br>
+JWT_SECRET=your_secret_key<br>
+PORT=5050<br>
+VITE_API_URL=https://your-api-url<br>
 
 ---
 
