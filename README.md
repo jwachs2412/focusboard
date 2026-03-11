@@ -1,95 +1,258 @@
-# React + TypeScript + Vite
+# Task Manager App (React + TypeScript + Node + MongoDB)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack task management application where users can register, log in, and manage personal tasks securely.
 
-Currently, two official plugins are available:
+Built with:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React
+- TypeScript
+- Vite
+- Express
+- MongoDB
+- JWT Authentication
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Tech Stack
 
-## Expanding the ESLint configuration
+## Frontend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React
+- TypeScript
+- Vite
+- React Context API
+- Custom Hooks
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+## Backend
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JWT Authentication
+- bcrypt password hashing
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Features
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x"
-import reactDom from "eslint-plugin-react-dom"
+### Authentication
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname
-      }
-      // other options...
-    }
-  }
-])
-```
+- User registration
+- User login
+- JWT token authentication
+- Protected API routes
+- Protected frontend routes
 
-## 🏗 Architecture Decisions
+### Task Management
 
-### **Feature-Based Structure**
+- Create tasks
+- View tasks
+- Toggle completion
+- Delete tasks
 
-Task-related components are grouped inside: `components/tasks/`. This keeps feature logic colocated and scalable.
+### Security
 
-### **State Management**
+- Password hashing with bcrypt
+- JWT authentication middleware
+- Token verification on protected routes
 
-Task state is abstracted into a custom hook: `useTasks`. This separates business logic from UI composition.
+---
 
-### **Single Source of Truth**
+# Project Structure
 
-All task mutations (add, delete, toggle) live inside `useTasks`.
+## Frontend
 
-### **Derived State**
+src
+├── assets
+├── components
+│ ├── layout
+│ └── tasks
+├── contexts
+│ └── AuthContext.tsx
+├── hooks
+│ └── useTasks.ts
+├── pages
+│ ├── LoginPage.tsx
+│ └── RegisterPage.tsx
+├── services
+│ └── taskService.ts
+├── styles
+└── types
+└── Task.ts
 
-Active task count is derived from `tasks` rather thaan stored separately to prevent state drift.
+## Backend
 
-### **Type Safety**
+server/src
+├── controllers
+│ ├── authController.ts
+│ └── taskController.ts
+├── middleware
+│ └── auth.ts
+├── models
+│ ├── UserModel.ts
+│ └── TaskModel.ts
+├── routes
+│ ├── auth.ts
+│ └── tasks.ts
+├── services
+│ ├── authService.ts
+│ └── taskService.ts
+└── index.ts
+
+---
+
+# Environment Variables
+
+### `.env.development`
+
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5050
+VITE_API_URL=http://localhost:5050
+
+### `.env.production`
+
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5050
+VITE_API_URL=https://your-api-url
+
+---
+
+# Running the Project
+
+## Install Dependencies
+
+Frontend
+
+npm install
+
+Backend
+
+cd server
+npm install
+
+---
+
+## Start Development Servers
+
+Backend
+
+cd server
+npm run dev
+
+Frontend
+
+npm run dev
+
+Frontend runs on:
+
+http://localhost:5173
+
+Backend runs on:
+
+http://localhost:5050
+
+---
+
+# 🏗 Architecture Decisions
+
+### Feature-Based Structure
+
+Task-related components are grouped inside:
+
+components/tasks/
+
+This keeps feature logic colocated and scalable.
+
+### State Management
+
+Task state is abstracted into a custom hook:
+
+useTasks
+
+This separates business logic from UI composition.
+
+### Services Layer (Backend)
+
+Business logic is moved to **services** so controllers remain lightweight.
+
+Route → Controller → Service → Database
+
+Benefits:
+
+- Cleaner route handlers
+- Reusable logic
+- Easier testing
+- Better separation of concerns
+
+### Single Source of Truth
+
+All task mutations live inside:
+
+useTasks
+
+This prevents state inconsistencies between components.
+
+### Derived State
+
+Active task count is derived from `tasks` rather than stored separately to prevent state drift.
+
+### Type Safety
 
 A centralized `Task` type ensures consistency across components.
+
+---
+
+# Security Flow
+
+Authentication flow:
+
+User Login
+↓
+Backend validates credentials
+↓
+JWT token generated
+↓
+Token stored in localStorage
+↓
+Frontend sends Authorization header
+↓
+Backend middleware verifies token
+
+---
+
+# Future Improvements
+
+Potential enhancements:
+
+- Task due dates
+- Task categories
+- Drag-and-drop task ordering
+- Refresh tokens
+- User profiles
+- Deployment with Docker
+
+---
+
+# React + TypeScript + Vite (Template Info)
+
+This project started with the official Vite React + TypeScript template.
+
+It provides:
+
+- Fast Refresh via Vite
+- ESLint integration
+- TypeScript support
+- Modern React tooling
+
+See the Vite docs for more:
+
+https://vite.dev
+
+---
+
+# Author
+
+Built as part of a full-stack development learning project.
