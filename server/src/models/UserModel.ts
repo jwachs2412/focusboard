@@ -1,7 +1,8 @@
-import mongoose, { HydratedDocument } from "mongoose"
+import mongoose, { HydratedDocument, Types, Document } from "mongoose"
 import bcrypt from "bcrypt"
 
 export interface IUser extends Document {
+  _id: Types.ObjectId
   name: string
   email: string
   password: string

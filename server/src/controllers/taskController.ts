@@ -1,6 +1,7 @@
-import { Request, Response } from "express"
+import { Response } from "express"
 import * as taskService from "../services/taskService"
 import { ITask } from "../models/TaskModel"
+import { AuthRequest } from "../middleware/auth"
 
 interface CreateTaskBody {
   title: string
@@ -12,9 +13,12 @@ interface UpdateTaskBody {
 }
 
 // GET /tasks
-export const getTasks = async (req: Request, res: Response): Promise<Response> => {
+export const getTasks = async (req: AuthRequest, res: Response): Promise<Response> => {
   try {
-    const tasks: ITask[] = await taskService.getAllTasks()
+    const userId = req.user!._id.toString()
+    if (!userId) return res.status(401).json({ error: "User not authenticated" })
+
+    const tasks: ITask[] = await taskService.getAllTasks(userId)
     return res.status(200).json(
       tasks.map(t => ({
         id: t._id.toString(),
@@ -29,12 +33,15 @@ export const getTasks = async (req: Request, res: Response): Promise<Response> =
 }
 
 // POST /tasks
-export const createTask = async (req: Request<unknown, unknown, CreateTaskBody>, res: Response): Promise<Response> => {
+export const createTask = async (req: AuthRequest, res: Response): Promise<Response> => {
   const { title } = req.body
   if (!title) return res.status(400).json({ error: "Title is required" })
 
+  const userId = req.user!._id.toString()
+
   try {
-    const savedTask: ITask = await taskService.createTask(title)
+    if (!req.user) return res.status(401).json({ error: "User not authenticated" })
+    const savedTask: ITask = await taskService.createTask(title, userId)
     return res.status(201).json({
       id: savedTask._id.toString(),
       title: savedTask.title,
@@ -47,13 +54,16 @@ export const createTask = async (req: Request<unknown, unknown, CreateTaskBody>,
 }
 
 // PUT /tasks/:id
-export const updateTask = async (req: Request, res: Response): Promise<Response> => {
+export const updateTask = async (req: AuthRequest, res: Response): Promise<Response> => {
   // Use type assertion to satisfy TypeScript
   const { id } = req.params as { id: string }
   const { title, completed } = req.body as UpdateTaskBody
 
+  const userId = req.user!._id.toString()
+
   try {
-    const updatedTask: ITask = await taskService.updateTask(id, { title, completed })
+    if (!req.user) return res.status(401).json({ error: "User not authenticated" })
+    const updatedTask: ITask = await taskService.updateTask(id, { title, completed }, userId)
     return res.status(200).json({
       id: updatedTask._id.toString(),
       title: updatedTask.title,
@@ -66,11 +76,14 @@ export const updateTask = async (req: Request, res: Response): Promise<Response>
 }
 
 // DELETE /tasks/:id
-export const deleteTask = async (req: Request, res: Response): Promise<Response> => {
+export const deleteTask = async (req: AuthRequest, res: Response): Promise<Response> => {
   const { id } = req.params as { id: string }
 
+  const userId = req.user!._id.toString()
+
   try {
-    await taskService.deleteTaskById(id)
+    if (!req.user) return res.status(401).json({ error: "User not authenticated" })
+    await taskService.deleteTaskById(id, userId)
     return res.status(204).send()
   } catch (error: unknown) {
     console.error(error)
