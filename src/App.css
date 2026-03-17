@@ -8,6 +8,15 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
 #root {
   margin-block: 0;
   margin-inline: auto;
@@ -65,6 +74,7 @@
 .skeleton-checkbox,
 .skeleton-text,
 .skeleton-delete {
+  animation: shimmer 1.5s infinite linear;
   background: #e0e0e0;
   border-radius: 4px;
 }
@@ -78,4 +88,34 @@
 .skeleton-text {
   block-size: 1rem;
   flex: 1;
+}
+
+.skeleton-title,
+.skeleton-button {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  width: 70%;
+  height: 1rem;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.skeleton-button {
+  width: 50px;
+  height: 1rem;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.task-skeleton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.task-list.skeleton li {
+  opacity: 0.8;
 }

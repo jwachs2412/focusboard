@@ -17,12 +17,12 @@ function TaskForm({ onAddTask }: TaskFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="task-form">
+    <form onSubmit={handleSubmit} className="task-form" aria-label="Add new task">
       <label htmlFor="task-input" className="sr-only">
         Task title
       </label>
-      <input id="task-input" type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Add a task..." />
-      <button type="submit" disabled={!input.trim()} aria-disabled={!input.trim()}>
+      <input id="task-input" type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Add a task..." aria-required="true" />
+      <button type="submit" disabled={!input.trim()} aria-disabled={!input.trim()} aria-label="Add task">
         Add
       </button>
     </form>

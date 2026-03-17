@@ -1,5 +1,6 @@
 import TaskItem from "./TaskItem"
 import type { Task } from "../../types/Task"
+import EmptyState from "./EmptyState"
 
 type TaskListProps = {
   tasks: Task[]
@@ -11,7 +12,7 @@ type TaskListProps = {
 function TaskList({ tasks, onToggle, onDelete, loading }: TaskListProps) {
   if (loading) {
     return (
-      <ul className="task-list">
+      <ul className="task-list" aria-label="Loading tasks" role="status">
         {Array.from({ length: 5 }).map((_, i) => (
           <li key={i} className="task-item skeleton">
             <div className="skeleton-checkbox" />
@@ -24,11 +25,7 @@ function TaskList({ tasks, onToggle, onDelete, loading }: TaskListProps) {
   }
 
   if (!tasks.length && !loading) {
-    return (
-      <ul className="task-list empty">
-        <li>No tasks yet! Add your first task above ✨</li>
-      </ul>
-    )
+    return <EmptyState />
   }
 
   return (
