@@ -9,8 +9,13 @@ type TaskItemProps = {
 function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   return (
     <li className={`task-item ${task.completed ? "task-item--completed" : ""}`}>
-      <span onClick={() => onToggle(task.id)}>{task.title}</span>
-      <button onClick={() => onDelete(task.id)}>Delete</button>
+      <label className="task-label">
+        <input type="checkbox" checked={task.completed} onChange={() => onToggle(task.id)} aria-label={`Mark "${task.title}" as ${task.completed ? "incomplete" : "complete"}`} />
+        <span>{task.title}</span>
+      </label>
+      <button onClick={() => onDelete(task.id)} aria-label={`Delete task "${task.title}"`}>
+        ❌
+      </button>
     </li>
   )
 }

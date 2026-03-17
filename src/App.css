@@ -1,15 +1,26 @@
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  margin-block: 0;
+  margin-inline: auto;
+  max-inline-size: 1280px;
   padding: 2rem;
   text-align: center;
 }
 
 .logo {
-  height: 6em;
+  block-size: 6em;
   padding: 1.5em;
-  will-change: filter;
   transition: filter 300ms;
+  will-change: filter;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
@@ -39,4 +50,32 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.skeleton {
+  align-items: center;
+  animation: pulse 1.5s infinite;
+  border-radius: 4px;
+  background: #f0f0f0;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.skeleton-checkbox,
+.skeleton-text,
+.skeleton-delete {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.skeleton-checkbox,
+.skeleton-delete {
+  block-size: 1.25rem;
+  inline-size: 1.25rem;
+}
+
+.skeleton-text {
+  block-size: 1rem;
+  flex: 1;
 }

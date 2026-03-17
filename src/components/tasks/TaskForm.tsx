@@ -18,8 +18,13 @@ function TaskForm({ onAddTask }: TaskFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="task-form">
-      <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Add a task..." />
-      <button type="submit">Add</button>
+      <label htmlFor="task-input" className="sr-only">
+        Task title
+      </label>
+      <input id="task-input" type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="Add a task..." />
+      <button type="submit" disabled={!input.trim()} aria-disabled={!input.trim()}>
+        Add
+      </button>
     </form>
   )
 }
