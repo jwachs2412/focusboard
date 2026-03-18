@@ -6,9 +6,25 @@ import tasksRouter from "./routes/tasks"
 
 export const app = express()
 
-app.use(cors())
+const allowedOrigins = ["https://usertaskboard.netlify.app/", "http://localhost:5173"]
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman or server-to-server)
+      if (!origin) return callback(null, true)
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error("CORS not allowed"))
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+)
+
 app.use(express.json())
 app.use("/auth", authRoutes)
 app.use("/tasks", tasksRouter)
-
-// Don't call mongoose.connect() or app.listen() here
