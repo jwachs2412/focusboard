@@ -9,12 +9,13 @@ export const registerUser = async (name: string, email: string, password: string
   const salt = await bcrypt.genSalt(10)
   const hashed = await bcrypt.hash(password, salt)
 
-  const user = new User({ name, email, password: hashed })
+  const user = new User({ name, email: email.toLowerCase().trim(), password: hashed })
   return user.save()
 }
 
 export const loginUser = async (email: string, password: string) => {
-  const user = await User.findOne({ email })
+  const normalizedEmail = email.toLowerCase().trim()
+  const user = await User.findOne({ email: normalizedEmail })
   if (!user) throw new Error("Invalid email or password")
 
   const match = await bcrypt.compare(password, user.password)
