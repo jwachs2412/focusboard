@@ -3,7 +3,7 @@ import Layout from "./components/layout/Layout"
 import TaskBoard from "./components/tasks/TaskBoard"
 import RegisterPage from "./pages/RegisterPage"
 import LoginPage from "./pages/LoginPage"
-import { ProtectedRoute } from "../src/components/ProtectedRoute"
+import { ProtectedRoute } from "./components/ProtectedRoute"
 
 function App() {
   return (
