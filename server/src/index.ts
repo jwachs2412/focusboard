@@ -6,7 +6,7 @@ import tasksRouter from "./routes/tasks"
 
 export const app = express()
 
-const allowedOrigins = ["https://usertaskboard.netlify.app/", "http://localhost:5173"]
+const allowedOrigins = ["https://usertaskboard.netlify.app", "http://localhost:5173"]
 
 app.use(
   cors({
@@ -21,7 +21,8 @@ app.use(
       }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
   })
 )
 
