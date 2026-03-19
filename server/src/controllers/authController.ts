@@ -1,3 +1,4 @@
+// File where registration and login requests are handled
 import { Request, Response } from "express"
 import * as authService from "../services/authService"
 

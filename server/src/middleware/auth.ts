@@ -1,3 +1,4 @@
+// This file verifies JWT tokens and is important for security
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
 import { User, IUser } from "../models/UserModel"
