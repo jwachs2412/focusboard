@@ -6,10 +6,11 @@ export const registerUser = async (name: string, email: string, password: string
   const existingUser = await User.findOne({ email })
   if (existingUser) throw new Error("Email already exists")
 
-  // const salt = await bcrypt.genSalt(10)
-  // const hashed = await bcrypt.hash(password, salt)
+  const cleanName = name.trim()
+  const cleanEmail = email.toLowerCase().trim()
 
-  const user = new User({ name, email: email.toLowerCase().trim(), password })
+  const user = new User({ name: cleanName, email: cleanEmail, password })
+
   return user.save()
 }
 

@@ -4,10 +4,6 @@ import * as taskService from "../services/taskService"
 import { ITask } from "../models/TaskModel"
 import { AuthRequest } from "../middleware/auth"
 
-interface CreateTaskBody {
-  title: string
-}
-
 interface UpdateTaskBody {
   title?: string
   completed?: boolean
@@ -36,7 +32,8 @@ export const getTasks = async (req: AuthRequest, res: Response): Promise<Respons
 // POST /tasks
 export const createTask = async (req: AuthRequest, res: Response): Promise<Response> => {
   const { title } = req.body
-  if (!title) return res.status(400).json({ error: "Title is required" })
+  if (!title || typeof title !== "string" || !title.trim()) return res.status(400).json({ error: "Valid title is required" })
+  if (title.length > 100) return res.status(400).json({ error: "Title must be under 100 characters" })
 
   const userId = req.user!._id.toString()
 
