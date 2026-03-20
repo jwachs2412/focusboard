@@ -22,6 +22,6 @@ export const loginUser = async (email: string, password: string) => {
   const match = await bcrypt.compare(password, user.password)
   if (!match) throw new Error("Invalid email or password")
 
-  const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET as string, { expiresIn: "1h" })
+  const token = jwt.sign({ id: user._id, type: "access" }, process.env.JWT_SECRET as string, { expiresIn: "1h" })
   return token
 }

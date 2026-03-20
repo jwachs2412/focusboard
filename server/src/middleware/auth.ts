@@ -7,6 +7,10 @@ export interface AuthRequest extends Request {
   user?: IUser
 }
 
+interface JwtPayload {
+  id: string
+}
+
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization
 
@@ -20,7 +24,7 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     const secret = process.env.JWT_SECRET
     if (!secret) throw new Error("JWT_SECRET is not defined")
 
-    const decoded = jwt.verify(token, secret) as { id: string }
+    const decoded = jwt.verify(token, secret) as JwtPayload
 
     const user = await User.findById(decoded.id).select("-password")
     if (!user) return res.status(401).json({ error: "User not found" })
