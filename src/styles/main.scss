@@ -6,3 +6,9 @@ body {
   font-family: system-ui, sans-serif;
   background: #f5f5f5;
 }
+
+#root {
+  margin-block: 0;
+  margin-inline: auto;
+  max-inline-size: 1280px;
+}

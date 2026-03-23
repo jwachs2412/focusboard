@@ -4,6 +4,9 @@
   min-block-size: 100vh;
 
   &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: #111;
     color: #fff;
     padding-block: 1rem;
@@ -13,5 +16,123 @@
   &__main {
     flex: 1;
     padding: 2rem;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.logo {
+  block-size: 6em;
+  padding: 1.5em;
+  transition: filter 300ms;
+  will-change: filter;
+
+  &.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+  }
+
+  &:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.skeleton {
+  align-items: center;
+  animation: pulse 1.5s infinite;
+  border-radius: 4px;
+  background: #f0f0f0;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+
+  &-checkbox,
+  &-text,
+  &-delete {
+    animation: shimmer 1.5s infinite linear;
+    background: #e0e0e0;
+    border-radius: 4px;
+  }
+
+  &-checkbox,
+  &-delete {
+    block-size: 1.25rem;
+    inline-size: 1.25rem;
+  }
+
+  &-text {
+    block-size: 1rem;
+    flex: 1;
+  }
+
+  &-title,
+  &-button {
+    background: #e0e0e0;
+    border-radius: 4px;
+  }
+
+  &-title {
+    inline-size: 70%;
+    block-size: 1rem;
+    animation: shimmer 1.5s infinite linear;
+  }
+
+  &-button {
+    inline-size: 50px;
+    block-size: 1rem;
+    animation: shimmer 1.5s infinite linear;
+  }
+}
+
+.task-skeleton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.task-list {
+  &.skeleton li {
+    opacity: 0.8;
   }
 }
