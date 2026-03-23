@@ -1,5 +1,6 @@
-import { createContext, useState, useContext } from "react"
+import { createContext, useState, useEffect } from "react"
 import type { ReactNode } from "react"
+import { setUnauthorizedHandler } from "../services/api"
 
 interface AuthContextType {
   token: string | null
@@ -7,7 +8,7 @@ interface AuthContextType {
   logout: () => void
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(() => {
@@ -24,14 +25,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null)
   }
 
-  return <AuthContext.Provider value={{ token, login, logout }}>{children}</AuthContext.Provider>
-}
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      logout()
+      window.location.href = "/login"
+    })
+  }, [])
 
-// Custom hook to use the auth context
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
+  return <AuthContext.Provider value={{ token, login, logout }}>{children}</AuthContext.Provider>
 }
