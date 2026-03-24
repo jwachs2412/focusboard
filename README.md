@@ -58,6 +58,7 @@ Users can register, log in, and manage personal tasks with a clean UI and protec
 - View tasks
 - Toggle completion
 - Delete tasks
+- Task priority levels (low, medium, high) for better task organization
 
 ### Security
 
