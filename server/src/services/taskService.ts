@@ -5,9 +5,9 @@ export const getAllTasks = async (userId: string): Promise<ITask[]> => {
   return Task.find({ user: userId })
 }
 
-export const createTask = async (title: string, userId: string): Promise<ITask> => {
+export const createTask = async (title: string, userId: string, priority: "low" | "medium" | "high"): Promise<ITask> => {
   const cleanTitle = title.trim()
-  const task = new Task({ title: cleanTitle, user: userId })
+  const task = new Task({ title: cleanTitle, user: userId, priority })
   return task.save()
 }
 
@@ -20,6 +20,10 @@ export const updateTask = async (id: string, updateData: Partial<ITask>, userId:
 
   if (updateData.completed !== undefined) {
     sanitizedData.completed = updateData.completed
+  }
+
+  if (updateData.priority !== undefined) {
+    sanitizedData.priority = updateData.priority
   }
 
   const task = await Task.findOneAndUpdate({ _id: id, user: userId }, sanitizedData, { new: true })

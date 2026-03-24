@@ -3,12 +3,12 @@ import type { Task } from "../types/Task"
 
 export const getTasks = (token: string) => apiFetch("/tasks", {}, token)
 
-export const createTask = (title: string, token: string) =>
+export const createTask = (title: string, priority: "low" | "medium" | "high", token: string) =>
   apiFetch(
     "/tasks",
     {
       method: "POST",
-      body: JSON.stringify({ title })
+      body: JSON.stringify({ title, priority })
     },
     token
   )

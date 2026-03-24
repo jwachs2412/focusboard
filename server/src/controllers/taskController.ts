@@ -7,6 +7,7 @@ import { AuthRequest } from "../middleware/auth"
 interface UpdateTaskBody {
   title?: string
   completed?: boolean
+  priority?: "low" | "medium" | "high"
 }
 
 // GET /tasks
@@ -20,7 +21,8 @@ export const getTasks = async (req: AuthRequest, res: Response): Promise<Respons
       tasks.map(t => ({
         id: t._id.toString(),
         title: t.title,
-        completed: t.completed
+        completed: t.completed,
+        priority: t.priority
       }))
     )
   } catch (error: unknown) {
@@ -31,19 +33,25 @@ export const getTasks = async (req: AuthRequest, res: Response): Promise<Respons
 
 // POST /tasks
 export const createTask = async (req: AuthRequest, res: Response): Promise<Response> => {
-  const { title } = req.body
+  const { title, priority } = req.body
   if (!title || typeof title !== "string" || !title.trim()) return res.status(400).json({ error: "Valid title is required" })
   if (title.length > 100) return res.status(400).json({ error: "Title must be under 100 characters" })
 
+  const validPriorities = ["low", "medium", "high"]
+  if (priority && !validPriorities.includes(priority)) {
+    return res.status(400).json({ error: "Invalid priority value" })
+  }
+
+  if (!req.user) return res.status(401).json({ error: "User not authenticated" })
   const userId = req.user!._id.toString()
 
   try {
-    if (!req.user) return res.status(401).json({ error: "User not authenticated" })
-    const savedTask: ITask = await taskService.createTask(title, userId)
+    const savedTask: ITask = await taskService.createTask(title, userId, priority)
     return res.status(201).json({
       id: savedTask._id.toString(),
       title: savedTask.title,
-      completed: savedTask.completed
+      completed: savedTask.completed,
+      priority: savedTask.priority
     })
   } catch (error: unknown) {
     console.error(error)
@@ -55,17 +63,23 @@ export const createTask = async (req: AuthRequest, res: Response): Promise<Respo
 export const updateTask = async (req: AuthRequest, res: Response): Promise<Response> => {
   // Use type assertion to satisfy TypeScript
   const { id } = req.params as { id: string }
-  const { title, completed } = req.body as UpdateTaskBody
+  const { title, completed, priority } = req.body as UpdateTaskBody
 
   const userId = req.user!._id.toString()
 
+  const validPriorities = ["low", "medium", "high"]
+  if (priority && !validPriorities.includes(priority)) {
+    return res.status(400).json({ error: "Invalid priority value" })
+  }
+
   try {
     if (!req.user) return res.status(401).json({ error: "User not authenticated" })
-    const updatedTask: ITask = await taskService.updateTask(id, { title, completed }, userId)
+    const updatedTask: ITask = await taskService.updateTask(id, { title, completed, priority }, userId)
     return res.status(200).json({
       id: updatedTask._id.toString(),
       title: updatedTask.title,
-      completed: updatedTask.completed
+      completed: updatedTask.completed,
+      priority: updatedTask.priority
     })
   } catch (error: unknown) {
     console.error(error)

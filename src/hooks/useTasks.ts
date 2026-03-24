@@ -32,11 +32,11 @@ export function useTasks() {
     }
   }, [token])
 
-  const addTask = async (title: string) => {
+  const addTask = async (title: string, priority: "low" | "medium" | "high") => {
     if (!token) return
 
     try {
-      const newTask = await taskService.createTask(title, token)
+      const newTask = await taskService.createTask(title, priority, token)
 
       setTasks(prev => [...prev, newTask])
       setError(null)
