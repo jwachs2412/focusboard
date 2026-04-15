@@ -191,9 +191,9 @@ Frontend
 npm run dev
 ```
 
-Frontend runs on: `http://localhost:5173`
+Frontend runs on: `https://usertaskboard.netlify.app/`
 
-Backend runs on: `http://localhost:5050`
+Backend runs on: `https://usertaskboard.netlify.app/`
 
 ---
 
